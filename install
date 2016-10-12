@@ -6,6 +6,9 @@ SYNTHESIZE_HOME=$( cd "$( dirname "$0" )" && pwd )
 UBUNTU_RELEASE=`lsb_release -a 2>/dev/null | grep '^Descrip' | cut -s -f 2`
 
 GRAPHITE_HOME='/opt/graphite'
+
+rm -rf $GRAPHITE_HOME
+
 GRAPHITE_CONF="${GRAPHITE_HOME}/conf"
 GRAPHITE_STORAGE="${GRAPHITE_HOME}/storage"
 
@@ -48,6 +51,7 @@ mv ${GRAPHITE_CONF}/*.example ${GRAPHITE_CONF}/examples/
 cp ${SYNTHESIZE_HOME}/templates/graphite/conf/* ${GRAPHITE_CONF}/
 cp ${SYNTHESIZE_HOME}/templates/collectd/collectd.conf /etc/collectd/
 cp ${SYNTHESIZE_HOME}/templates/apache/graphite.conf /etc/apache2/sites-available/
+cp ${SYNTHESIZE_HOME}/templates/apache/ports.conf /etc/apache2/
 cp ${SYNTHESIZE_HOME}/templates/init/* /etc/init/
 cp ${SYNTHESIZE_HOME}/templates/init.d/* /etc/init.d/
 
@@ -81,6 +85,11 @@ chmod +x /etc/init.d/carbon-cache
 cp ${SYNTHESIZE_HOME}/templates/graphite/cron/build-index /etc/cron.hourly/graphite-build-index
 chmod 755 /etc/cron.hourly/graphite-build-index
 sudo -u www-data /opt/graphite/bin/build-index.sh
+
+service carbon-cache stop
+service memcached stop
+service collectd stop
+service apache2 stop
 
 # Start our processes
 update-rc.d carbon-cache defaults

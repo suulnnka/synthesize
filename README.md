@@ -31,23 +31,12 @@ The resulting Graphite server __listens only on https port 443__ and has been co
 ```
 $ cd synthesize
 $ sudo ./install
-```
 
-### Vagrant
+$ 出错了就再跑一次.
+$ port 是 8180
+$ 如果git clone 已存在,就注释掉install脚本中的git clone
+$ 如果group已存在,就注释掉install脚本中的那一行
 
-Synthesize configures the following host ports to forward to the private vagrant box:
-
-```
-config.vm.network :forwarded_port, guest: 443, host: 8443
-config.vm.network :forwarded_port, guest: 8125, host: 8125
-config.vm.network :forwarded_port, guest: 2003, host: 22003
-config.vm.network :forwarded_port, guest: 2004, host: 22004
-```
-
-```
-$ cd synthesize
-$ vagrant plugin install vagrant-vbguest
-$ vagrant up
 ```
 
 ## Administration
