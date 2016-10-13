@@ -33,10 +33,29 @@ RUNLEVEL=1 apt-get install -y libcairo2-dev libffi-dev pkg-config python-dev pyt
 
 # Download source repositories for Graphite/Carbon/Whisper and Statsite
 cd /usr/local/src
-git clone https://github.com/graphite-project/graphite-web.git
-git clone https://github.com/graphite-project/carbon.git
-git clone https://github.com/graphite-project/whisper.git
-git clone https://github.com/armon/statsite.git
+if [ -d graphite-web ]; then
+  echo already git clone graphite-web
+else
+  git clone https://github.com/graphite-project/graphite-web.git
+fi
+
+if [ -d carbon ]; then
+  echo already git clone carbon
+else
+  git clone https://github.com/graphite-project/carbon.git
+fi
+
+if [ -d whisper ]; then
+  echo already git clone whisper
+else
+  git clone https://github.com/graphite-project/whisper.git
+fi
+
+if [ -d statsite ]; then
+  echo already git clone statsite
+else
+  git clone https://github.com/armon/statsite.git
+fi
 
 # Build and install Graphite/Carbon/Whisper and Statsite
 cd whisper; git checkout ${GRAPHITE_RELEASE}; python setup.py install
@@ -72,6 +91,9 @@ python manage.py syncdb --noinput
 chown www-data:www-data ${GRAPHITE_STORAGE}/graphite.db
 
 # Add carbon system user and set permissions
+
+userdel carbon
+
 groupadd -g 998 carbon
 useradd -c "carbon user" -g 998 -u 998 -s /bin/false carbon
 chmod 775 ${GRAPHITE_STORAGE}
@@ -98,4 +120,3 @@ service memcached start
 service collectd start
 service apache2 start
 service statsite start
-

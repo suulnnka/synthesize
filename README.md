@@ -34,8 +34,6 @@ $ sudo ./install
 
 $ 出错了就再跑一次.
 $ port 是 8180
-$ 如果git clone 已存在,就注释掉install脚本中的git clone
-$ 如果group已存在,就注释掉install脚本中的那一行
 
 ```
 
